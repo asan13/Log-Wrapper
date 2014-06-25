@@ -1,7 +1,9 @@
 package Log::Wrapper;
 
-use common::sense;
 
+our $VERSION = 0.01;
+
+use common::sense;
 use Scalar::Util qw/set_prototype/;
 
 # use Log::Wrapper;
