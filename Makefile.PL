@@ -9,7 +9,7 @@ WriteMakefile(
     AUTHOR       => 'Andrey Asyakin <asan999@gmail.com>',
 
     PREREQ_PM   => {
-        'common::sens' => 0,
+        'common::sense' => 0,
     }
 );
 
