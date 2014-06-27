@@ -105,13 +105,19 @@ sub import {
                     ];
                 } else {
                     $color = C_ESCAPE $color;
-                    my $l_args = $single ? qq["$color\@_$reset"]
-                                        : qq["$color", \@_, "$reset"];
-                    $code = qq[
+                    $code = qq!
                        sub $caller\::$uc_method(@) {
-                            \$::_W_LOGGER->$method($l_args);
+                            if ( \@_ > 1 && ref \$_[0] eq 'SCALAR' ) {
+                                my \$color = \${+shift};
+                                \$::_W_LOGGER->$method(
+                                    "\\e[38;5;\${color}m", \@_, "$reset"
+                                );
+                            }
+                            else {
+                                \$::_W_LOGGER->$method("$color", \@_, "$reset");
+                            }
                         }
-                    ];
+                    !;
 
                     $caller->_inject_eval($code);
                 }
@@ -238,9 +244,9 @@ our $AUTOLOAD;
 sub AUTOLOAD {
     my $self = shift;
 
-    my ($method) = $AUTOLOAD =~ /([^:]+)$/;
+    my ($caller) = caller(1);
 
-    say "$AUTOLOAD @_";
+    say "$caller @_";
 }
 
 
